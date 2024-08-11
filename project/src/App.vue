@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import PostService from "./api/PostService";
-import Header from "./components/templates/Header.vue";
+import Header from "./components/Header.vue";
 </script>
 
 <script>
