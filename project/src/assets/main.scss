@@ -26,6 +26,11 @@ li{
 a{
     font-size: 12px;
     text-decoration: none;
+    color: $TransparentGray;
+}
+
+a:hover{
+    color: $FaintGray;
 }
 
 img{
@@ -70,7 +75,7 @@ h1, h3{
 }
 
 .user-position{
-    color: #CCCCCC;
+    color: $FaintGray;
     font-size: x-small;
 }
 
@@ -90,5 +95,14 @@ h1, h3{
 #containerLeftPainel{
     display: flex;
     flex-direction: column;
-    align-items: center;
+    margin: 15px 15px 15px 25px ;
+}
+
+.title-painel{
+    color: white;
+    margin-top: 15px;
+}
+
+.link-painel{
+    margin: 10px 0px 10px 0px;
 }

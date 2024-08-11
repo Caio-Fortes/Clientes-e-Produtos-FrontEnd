@@ -38,36 +38,34 @@ export default {
     <div id="leftPainel" v-show="leftPainelVisible">
         <div id="containerLeftPainel">
             <div>
-                GESTÃO DE CLIENTES
-                <ul>
-                    <li>
-                        <RouterLink to="/" @click="setVisibleleftPainel">
-                            lista de clientes
-                        </RouterLink>
-                    </li>
-                    <li>Cadastrar cliente</li>
-                </ul>
+                <div class="title-painel">GESTÃO DE CLIENTES</div>
+                <div class="link-painel">
+                    <RouterLink to="/" @click="setVisibleleftPainel">
+                        Lista de clientes
+                    </RouterLink>
+                </div>
+                <div class="link-painel">
+                    <a href="#">Cadastrar cliente </a>
+                </div>
             </div>
             <div>
-                GESTÃO DE Vendas
-                <ul>
-                    <li>
-                        <RouterLink to="/vendas" @click="setVisibleleftPainel">
-                            lista de vendas
-                        </RouterLink>
-                    </li>
-                    <li>Cadastrar venda</li>
-                </ul>
+                <div class="title-painel">GESTÃO DE VENDAS</div>
+                <div class="link-painel">
+                    <RouterLink to="/vendas" @click="setVisibleleftPainel">
+                        Lista de vendas
+                    </RouterLink>
+                </div>
+                <div class="link-painel">
+                    <a href="#">Cadastrar venda</a>
+                </div>
             </div>
             <div>
-                Relatórios
-                <ul>
-                    <li>
-                        <RouterLink to="/relatorios" @click="setVisibleleftPainel">
-                            Relatórios
-                        </RouterLink>
-                    </li>
-                </ul>
+                <div class="title-painel">Relatórios</div>
+                <div class="link-painel">
+                    <RouterLink to="/relatorios" @click="setVisibleleftPainel">
+                        Relatórios
+                    </RouterLink>
+                </div>
             </div>
         </div>
     </div>
