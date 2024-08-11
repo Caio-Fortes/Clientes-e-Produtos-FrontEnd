@@ -16,7 +16,7 @@ export default {
   methods:{
     async getAllClientes(){
       const teste = await PostService.getPosts("http://localhost:8081/clientes");
-      console.log(teste)
+      //console.log(teste)
     }
   }
 }
@@ -30,5 +30,8 @@ export default {
         <RouterLink to="/about">About</RouterLink> -->
       </nav>
   </header>
+  <h1>Lista de Clientes</h1>
+  <h3>dadasdas</h3>
+  <p>dasdasdasdasdasdasdasdasdas</p>
   <RouterView />
 </template>
