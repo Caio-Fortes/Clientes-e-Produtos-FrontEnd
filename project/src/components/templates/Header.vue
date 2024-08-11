@@ -1,13 +1,23 @@
 <script>
 export default {
+    data(){
+        return {
+            leftPainelVisible: false,
+            
+        }
+    },
+    methods:{
+        setVisibleleftPainel(){
+            this.leftPainelVisible = !this.leftPainelVisible;
+        },
+    }
 }
-
 </script>
 
 <template>
-   <header>
+    <header>
         <div id="headerTemplate">
-            <div class="logo-header">
+            <div class="logo-header" @click="setVisibleleftPainel()">
                 <img src="/logo.png" />
             </div>
             <div id="headerTools">
@@ -23,9 +33,47 @@ export default {
                 </div>
             </div>
         </div>
-  </header>
+    </header>
+
+    <div id="leftPainel" v-show="leftPainelVisible">
+        <div id="containerLeftPainel">
+            <div>
+                GESTÃO DE CLIENTES
+                <ul>
+                    <li>
+                        <RouterLink to="/" @click="setVisibleleftPainel">
+                            lista de clientes
+                        </RouterLink>
+                    </li>
+                    <li>Cadastrar cliente</li>
+                </ul>
+            </div>
+            <div>
+                GESTÃO DE Vendas
+                <ul>
+                    <li>
+                        <RouterLink to="/vendas" @click="setVisibleleftPainel">
+                            lista de vendas
+                        </RouterLink>
+                    </li>
+                    <li>Cadastrar venda</li>
+                </ul>
+            </div>
+            <div>
+                Relatórios
+                <ul>
+                    <li>
+                        <RouterLink to="/relatorios" @click="setVisibleleftPainel">
+                            Relatórios
+                        </RouterLink>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <RouterView />
 </template>
 
 <script setup>
-
+    import { RouterLink, RouterView } from 'vue-router'
 </script>

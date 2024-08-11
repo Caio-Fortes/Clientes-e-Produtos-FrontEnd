@@ -4,6 +4,6 @@ import TheWelcome from '../components/TheWelcome.vue'
 
 <template>
   <main>
-    <!-- <TheWelcome /> -->
+    <h1 style="background-color: green"> asdasdasd </h1>
   </main>
 </template>

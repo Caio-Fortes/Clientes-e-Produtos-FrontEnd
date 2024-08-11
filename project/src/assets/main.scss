@@ -78,3 +78,17 @@ h1, h3{
     width: 20px;
     height: 20px;
 }
+
+#leftPainel{
+    margin-top: 3px;
+    width: 210px;
+    height: 100vh;
+    background-color: $BlueDefault;
+    position: absolute;
+}
+
+#containerLeftPainel{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
