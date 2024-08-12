@@ -23,6 +23,10 @@ li{
     list-style-type: none;
 }
 
+i{
+    color: white;
+}
+
 a{
     font-size: 12px;
     text-decoration: none;
@@ -43,66 +47,31 @@ h1, h3{
     color: $StrongGray;
 }
 
-#headerTemplate{
+@include setConfigHeader();
+@include setConfigsLeftPainel();
+
+#containerBody{
+    margin: 10px 60px;
+}
+
+#titlePages{
+    color: $StrongGray;
+    border-bottom: $BlueDefault solid 3px;
+    border-bottom-style: solid;
+    display: inline-block;
+}
+
+#buttonDefault{
     background-color: $BlueDefault;
     color: white;
-    height: 60px;
+}
+
+#buttonDefault:hover{
+    background-color: #023e8ade;
+}
+
+#buttonsModal{
     display: flex;
-    align-items: center;
+    flex-direction: row;
     justify-content: space-between;
-}
-
-.logo-header{
-    width: 40px;
-    height: 37px;
-    margin-left: 10px;
-}
-
-#headerTools{
-    display: flex;
-    margin: 17px;
-    align-items: center;
-}
-
-.user-icon{
-    width: 25px;
-    height: 25px;
-    margin-right: 10px;
-}
-
-.user-login{
-    margin-right: 20px;
-}
-
-.user-position{
-    color: $FaintGray;
-    font-size: x-small;
-}
-
-.icon-loggout{
-    width: 20px;
-    height: 20px;
-}
-
-#leftPainel{
-    margin-top: 3px;
-    width: 210px;
-    height: 100vh;
-    background-color: $BlueDefault;
-    position: absolute;
-}
-
-#containerLeftPainel{
-    display: flex;
-    flex-direction: column;
-    margin: 15px 15px 15px 25px ;
-}
-
-.title-painel{
-    color: white;
-    margin-top: 15px;
-}
-
-.link-painel{
-    margin: 10px 0px 10px 0px;
 }

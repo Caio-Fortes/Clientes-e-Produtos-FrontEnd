@@ -1,8 +1,11 @@
 <script setup>
+  import TitlePage from "../components/TitlePage.vue";
 </script>
 
 <template>
   <main>
-    <h1 style="background-color: blue"> asdasdasd </h1>
+    <div id="containerBody">
+      <TitlePage title="Relatórios" />
+    </div>
   </main>
 </template>
