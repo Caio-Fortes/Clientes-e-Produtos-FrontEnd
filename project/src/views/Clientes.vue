@@ -63,7 +63,7 @@ export default {
     this.getUI();
   },
   methods: {
-    setVisibleModal(action, datas = {}) {
+    setVisibleModal(action, rowSelected = {}) {
       setTimeout(() => {
         this.map = L.map('map').setView([-19.9167, -43.9345], 5);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -83,6 +83,8 @@ export default {
         default: 
           break;
       }
+
+      console.log(rowSelected)
       this.modalVisible = !this.modalVisible;
     },
     async getUI(){
@@ -117,7 +119,7 @@ export default {
         titleTable="Clientes Cadastrados"
         urlGet="http://localhost:8081/clientes" 
         :columns="['Nome', 'CNPJ', 'Email', 'telefone']"
-        :keysDatas="['nome', 'cnpj', 'email', 'telefone']"
+        :keysDatas="['nome', 'cnpj', 'email', 'telefone', 'idCliente']"
         @actionSelected="setVisibleModal"
       />
 

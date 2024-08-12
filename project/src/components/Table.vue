@@ -21,7 +21,7 @@
         },
         data(){
             return{
-                dataGrid: []
+                dadosGrid: []
             }
         },
         mounted(){
@@ -31,7 +31,7 @@
         methods:{
             async getDatas(){
                 const datas = await PostService.getPosts(this.urlGet);
-                this.dataGrid = datas.map((a) => {
+                this.dadosGrid = datas.map((a) => {
                     return this.keysDatas.map((key) => a[key]);
                 });
                 this.montarTabela();
@@ -41,10 +41,15 @@
                     columns: this.columns,
                     pagination: true,
                     sort: true,
-                    data: this.dataGrid
+                    data: this.dadosGrid
                 }).render(document.getElementById("table"));
             },
             setConfigColumns(){
+                this.columns.push({
+                    name: "id", 
+                    formatter: (cell) => cell, 
+                    hidden: true
+                });
                 this.columns.push({
                     name: "Ações",
                     formatter: (cell, row) => {
@@ -78,7 +83,7 @@
                                     {
                                         className: "dropdown-item",
                                         href: "#",
-                                        onClick: () => handleDropdownClick('Edit', row.cells[0].data,)
+                                        onClick: () => handleDropdownClick('Edit', row.cells)
                                     },
                                     "Editar"
                                     )
@@ -91,7 +96,7 @@
                                     {
                                         className: "dropdown-item",
                                         href: "#",
-                                        onClick: () => handleDropdownClick('Delete', row.cells[0].data,)
+                                        onClick: () => handleDropdownClick('Delete', row.cells)
                                     },
                                     "Excluir"
                                     )
@@ -103,8 +108,16 @@
                     },
                     width: "120px"
                 })
-                const handleDropdownClick = (datas, action) => {
-                    this.$emit('actionSelected', datas, action)
+                const style = document.createElement('style');
+                style.innerHTML = `
+                    .gridjs-th:nth-child(4),
+                    .gridjs-td:nth-child(4) {
+                    display: none;
+                    }
+                `;
+                document.head.appendChild(style);
+                const handleDropdownClick = (action, rowSelected) => {
+                    this.$emit('actionSelected', action, rowSelected)
                 };
             }
         }
