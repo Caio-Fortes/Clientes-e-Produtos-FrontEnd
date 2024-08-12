@@ -21,7 +21,7 @@
             filterPlaceholder:{
                 type: String,
                 required: true,
-                default: 'exaple...'
+                default: 'example...'
             },
             filterKeys:{
                 type: Array,
@@ -171,7 +171,7 @@
 </template>
 
 <script setup>
-import PostService from "../api/PostService";
+import PostService from "@/services/PostService";
 import { Grid, h } from 'gridjs';
 import 'gridjs/dist/theme/mermaid.css';
 </script>

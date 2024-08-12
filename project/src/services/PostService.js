@@ -36,6 +36,8 @@ class PostService {
             throw new Error('Failed to insert post: ' + err.message);
         }
     }
+
+    
 }
 
 export default PostService;

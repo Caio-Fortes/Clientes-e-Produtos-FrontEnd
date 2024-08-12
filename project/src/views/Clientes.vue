@@ -213,6 +213,6 @@ export default {
 <script setup>
 import TitlePage from "../components/TitlePage.vue";
 import Modal from "../components/Modal.vue";
-import PostService from "../api/PostService";
+import PostService from "@/services/PostService";
 import Table from '../components/Table.vue';
 </script>
