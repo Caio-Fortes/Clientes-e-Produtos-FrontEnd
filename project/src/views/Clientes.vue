@@ -75,7 +75,6 @@ export default {
       console.log(this.UIs)
     },
     salvar(){
-      console.log()
     }
   }
 }
@@ -99,6 +98,13 @@ export default {
       <button type="button" class="btn btn-primary" id="buttonDefault" @click="modalCadastrar">
         <i class="fa-solid fa-plus"></i> Cadastrar Cliente
       </button>
+
+      <Table 
+        titleTable="Clientes Cadastrados"
+        urlGet="http://localhost:8081/clientes" 
+        :columns="['Nome', 'CNPJ', 'Email', 'telefone']"
+        :keysDatas="['nome', 'cnpj', 'email', 'telefone']"
+      />
 
       <Modal title="Cadastrar Cliente" v-if="modalVisible">
         <template #content> 
@@ -158,4 +164,5 @@ export default {
 import TitlePage from "../components/TitlePage.vue";
 import Modal from "../components/Modal.vue";
 import PostService from "../api/PostService";
+import Table from '../components/Table.vue';
 </script>
