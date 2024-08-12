@@ -4,19 +4,23 @@ export default {
     return {
       modalVisible: false,
       actionTitle: '',
+      dadosTable: [],
       flexConfig: "display: flex; justify-content: space-between;",
       UIs: [],
-      nome: '',
-      CNPJ: '',
-      telefone: '',
-      email: '',
-      uiSelected: '',
       map: null,
-      currentMarker: null
+      currentMarker: null,
+      cliente:{
+        nome: '',
+        CNPJ: '',
+        telefone: '',
+        email: '',
+        ui: '',
+      },
+      idClienteSelected: ''
     }
   },
   watch:{
-    uiSelected(sigla){
+    'cliente.ui': function (sigla) {
       const map = this.map;
       let currentMarker = this.currentMarker;
       if (currentMarker) { map.removeLayer(currentMarker)}
@@ -57,13 +61,13 @@ export default {
       }
       updateMapView(stateCoordinates[sigla]);
       this.currentMarker = currentMarker;
-    }
+    },
   },
   mounted(){
     this.getUI();
   },
   methods: {
-    setVisibleModal(action, rowSelected = {}) {
+    setVisibleModal(action, rowSelected = null) {
       setTimeout(() => {
         this.map = L.map('map').setView([-19.9167, -43.9345], 5);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -73,6 +77,7 @@ export default {
       switch (action) {
         case 'Create':
           this.actionTitle = "Cadastrar Cliente";
+          this.limparForms();
           break;
         case 'Edit':
           this.actionTitle = "Editar Cliente";
@@ -84,13 +89,35 @@ export default {
           break;
       }
 
-      console.log(rowSelected)
+      if(rowSelected){
+        const id = rowSelected[4].data;
+        const dataSelected = this.dadosTable.filter(a => a.idCliente == id);
+        this.cliente.nome = dataSelected[0].nome;
+        this.cliente.CNPJ = dataSelected[0].cnpj;
+        this.cliente.telefone = dataSelected[0].telefone;
+        this.cliente.email = dataSelected[0].email;
+        this.cliente.ui = dataSelected[0].ui;
+        this.idClienteSelected = id;
+      }
       this.modalVisible = !this.modalVisible;
     },
     async getUI(){
       this.UIs = await PostService.getPosts("https://servicodados.ibge.gov.br/api/v1/localidades/estados");
     },
+    limparForms(){
+      this.idClienteSelected = null;
+      this.cliente = {
+        nome: '',
+        CNPJ: '',
+        telefone: '',
+        email: '',
+        ui: '',
+      };
+    },
     salvar(){
+    },
+    excluir(){
+      console.log(this.idClienteSelected)
     }
   }
 }
@@ -120,7 +147,7 @@ export default {
         urlGet="http://localhost:8081/clientes" 
         :columns="['Nome', 'CNPJ', 'Email', 'telefone']"
         :keysDatas="['nome', 'cnpj', 'email', 'telefone', 'idCliente']"
-        @actionSelected="setVisibleModal"
+        @actionSelected="setVisibleModal" @dadosTable="(a) => {dadosTable = a}"
       />
 
       <Modal :title="actionTitle" v-if="modalVisible">
@@ -129,33 +156,33 @@ export default {
             <div>
               Nome *
               <div class="input-group mb-3">
-                <input type="text" class="form-control" v-model="nome">
+                <input type="text" class="form-control" v-model="cliente.nome">
               </div>
             </div>
             <div :style="flexConfig">
               <div>
                 CNPJ *
                 <div class="input-group mb-3">
-                  <input type="text" class="form-control" v-model="CNPJ">
+                  <input type="text" class="form-control" v-model="cliente.CNPJ">
                 </div>
               </div>
               <div>
                 Telefone *
                 <div class="input-group mb-3">
-                  <input type="text" class="form-control" v-model="telefone">
+                  <input type="text" class="form-control" v-model="cliente.telefone">
                 </div>
               </div>
             </div>
             <div>
               Email *
               <div class="input-group mb-3">
-                <input type="text" class="form-control" v-model="email">
+                <input type="text" class="form-control" v-model="cliente.email">
               </div>
             </div>
             <div>
               UF *
               <div class="input-group mb-3">
-                <select class="form-control" v-model="uiSelected">
+                <select class="form-control" v-model="cliente.ui">
                   <option v-for="ui in UIs" :value="ui.sigla">{{ ui.sigla }}</option>
                 </select>
               </div>
@@ -174,10 +201,15 @@ export default {
         >
           Cancelar
         </button>
-        <button type="button" class="btn btn-primary" 
-          @click="salvar"
-        >
-          {{ actionTitle == 'Excluir Cliente' ? 'Excluir' : 'Salvar'}}
+
+        <button v-show="actionTitle == 'Cadastrar Cliente' || actionTitle == 'Editar Cliente'" 
+          type="button" class="btn btn-primary" @click="salvar"
+        >  Salvar
+        </button>
+
+        <button v-show="actionTitle == 'Excluir Cliente'" 
+          type="button" class="btn btn-primary" @click="excluir" 
+        > Excluir
         </button>
       </template>
       </Modal>

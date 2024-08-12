@@ -34,6 +34,7 @@
                 this.dadosGrid = datas.map((a) => {
                     return this.keysDatas.map((key) => a[key]);
                 });
+                this.$emit("dadosTable", datas);
                 this.montarTabela();
             },
             montarTabela(){
