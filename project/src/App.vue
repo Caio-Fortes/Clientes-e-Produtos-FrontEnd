@@ -1,9 +1,8 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
 import PostService from "./api/PostService";
-import Header from "./components/Header.vue";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import Header from "./components/Header.vue";
 </script>
 
 <script>

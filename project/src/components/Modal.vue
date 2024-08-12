@@ -51,8 +51,13 @@ export default {
                 <DialogTitle as="h3" class="text-lg font-medium  p-2 text-white" style="background-color: #023E8A;">
                   {{ title }}
                 </DialogTitle>
-                <div class="mt-2 p-6 ">
-                    <slot></slot>
+                <div class="mt-2 p-6">
+                    <slot name="content"></slot>
+                </div>
+                <div class="p-3">
+                  <div id="buttonsModal">
+                    <slot name="buttons"></slot>
+                  </div>
                 </div>
               </DialogPanel>
             </TransitionChild>
