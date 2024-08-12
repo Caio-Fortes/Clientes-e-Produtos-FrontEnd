@@ -11,6 +11,7 @@
   "dependencies": {
     "@flaticon/flaticon-uicons": "^3.3.1",
     "@headlessui/vue": "^1.7.22",
+    "axios": "^1.7.3",
     "bootstrap": "^5.3.3",
     "gridjs": "^6.2.0",
     "leaflet": "^1.9.4",
@@ -20,6 +21,6 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",
-    "vite": "^5.3.1"
+    "vite": "^5.4.0"
   }
 }
