@@ -46,7 +46,7 @@
             },
             setConfigColumns(){
                 this.columns.push({
-                    name: "Actions",
+                    name: "Ações",
                     formatter: (cell, row) => {
                         return h(
                             "div",
@@ -61,7 +61,7 @@
                                 "data-bs-toggle": "dropdown",
                                 "aria-expanded": "false"
                                 },
-                                "Actions"
+                                "Ações"
                             ),
                             h(
                                 "ul",
@@ -78,7 +78,7 @@
                                     {
                                         className: "dropdown-item",
                                         href: "#",
-                                        onClick: () => handleDropdownClick(row.cells[0].data, 'Option 1')
+                                        onClick: () => handleDropdownClick('Edit', row.cells[0].data,)
                                     },
                                     "Editar"
                                     )
@@ -91,7 +91,7 @@
                                     {
                                         className: "dropdown-item",
                                         href: "#",
-                                        onClick: () => handleDropdownClick(row.cells[0].data, 'Option 2')
+                                        onClick: () => handleDropdownClick('Delete', row.cells[0].data,)
                                     },
                                     "Excluir"
                                     )
@@ -103,8 +103,8 @@
                     },
                     width: "120px"
                 })
-                const handleDropdownClick = (name) => {
-                    alert(`Button clicked for ${name}`);
+                const handleDropdownClick = (datas, action) => {
+                    this.$emit('actionSelected', datas, action)
                 };
             }
         }

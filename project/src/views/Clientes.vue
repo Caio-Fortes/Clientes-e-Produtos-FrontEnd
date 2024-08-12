@@ -3,6 +3,7 @@ export default {
   data() {
     return {
       modalVisible: false,
+      actionTitle: '',
       flexConfig: "display: flex; justify-content: space-between;",
       UIs: [],
       nome: '',
@@ -62,17 +63,30 @@ export default {
     this.getUI();
   },
   methods: {
-    modalCadastrar() {
-      this.modalVisible = !this.modalVisible;
+    setVisibleModal(action, datas = {}) {
       setTimeout(() => {
         this.map = L.map('map').setView([-19.9167, -43.9345], 5);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         }).addTo(this.map);
-      }, 200);
+      }, 300);
+      
+      switch (action) {
+        case 'Create':
+          this.actionTitle = "Cadastrar Cliente";
+          break;
+        case 'Edit':
+          this.actionTitle = "Editar Cliente";
+          break;
+        case 'Delete':
+          this.actionTitle = "Excluir Cliente";
+          break;
+        default: 
+          break;
+      }
+      this.modalVisible = !this.modalVisible;
     },
     async getUI(){
       this.UIs = await PostService.getPosts("https://servicodados.ibge.gov.br/api/v1/localidades/estados");
-      console.log(this.UIs)
     },
     salvar(){
     }
@@ -95,7 +109,7 @@ export default {
         </div>
       </div>
 
-      <button type="button" class="btn btn-primary" id="buttonDefault" @click="modalCadastrar">
+      <button type="button" class="btn btn-primary" id="buttonDefault" @click="setVisibleModal('Create')">
         <i class="fa-solid fa-plus"></i> Cadastrar Cliente
       </button>
 
@@ -104,55 +118,64 @@ export default {
         urlGet="http://localhost:8081/clientes" 
         :columns="['Nome', 'CNPJ', 'Email', 'telefone']"
         :keysDatas="['nome', 'cnpj', 'email', 'telefone']"
+        @actionSelected="setVisibleModal"
       />
 
-      <Modal title="Cadastrar Cliente" v-if="modalVisible">
-        <template #content> 
-          <div>
-          Nome *
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" v-model="nome">
-          </div>
-        </div>
-        <div :style="flexConfig">
-          <div>
-            CNPJ *
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" v-model="CNPJ">
+      <Modal :title="actionTitle" v-if="modalVisible">
+        <template #content>
+          <div v-show="actionTitle === 'Cadastrar Cliente' || actionTitle === 'Editar Cliente'">
+            <div>
+              Nome *
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" v-model="nome">
+              </div>
             </div>
-          </div>
-          <div>
-            Telefone *
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" v-model="telefone">
+            <div :style="flexConfig">
+              <div>
+                CNPJ *
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control" v-model="CNPJ">
+                </div>
+              </div>
+              <div>
+                Telefone *
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control" v-model="telefone">
+                </div>
+              </div>
             </div>
+            <div>
+              Email *
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" v-model="email">
+              </div>
+            </div>
+            <div>
+              UF *
+              <div class="input-group mb-3">
+                <select class="form-control" v-model="uiSelected">
+                  <option v-for="ui in UIs" :value="ui.sigla">{{ ui.sigla }}</option>
+                </select>
+              </div>
+            </div>
+            <div id="map" style="height: 150px; width: 450px;"></div>
           </div>
-        </div>
-        <div>
-          Email *
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" v-model="email">
+          <div v-show="actionTitle === 'Excluir Cliente'">
+            Deseja excluir este cliente ? Esta ação é irreversível e todas as vendas vinculadas
+            ao cliente serão excluidas.
           </div>
-        </div>
-        <div>
-          UF *
-          <div class="input-group mb-3">
-            <select class="form-control" v-model="uiSelected">
-              <option v-for="ui in UIs" :value="ui.sigla">{{ ui.sigla }}</option>
-            </select>
-          </div>
-        </div>
-        <div id="map" style="height: 150px; width: 450px;"></div>
       </template>
       <template #buttons>
         <button type="button" 
-          class="btn btn-primary" @click="modalCadastrar" 
+          class="btn btn-primary" @click="() => {modalVisible = false}" 
           style="background-color: gray"
         >
           Cancelar
         </button>
-        <button type="button" class="btn btn-primary" @click="salvar">
-          Salvar
+        <button type="button" class="btn btn-primary" 
+          @click="salvar"
+        >
+          {{ actionTitle == 'Excluir Cliente' ? 'Excluir' : 'Salvar'}}
         </button>
       </template>
       </Modal>
