@@ -17,6 +17,11 @@
             keysDatas:{
                 type: Array,
                 required: true,
+            },
+            filterPlaceholder:{
+                type: String,
+                required: true,
+                default: 'exaple...'
             }
         },
         data(){
@@ -120,12 +125,27 @@
                 const handleDropdownClick = (action, rowSelected) => {
                     this.$emit('actionSelected', action, rowSelected)
                 };
+            },
+            filtrar(){
+
             }
         }
     }
 </script>
 
 <template>
+    <div class="input-group">
+        <input type="text" class="form-control" 
+          :placeholder="filterPlaceholder"
+          aria-describedby="basic-addon2"
+        >
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" id="buttonDefault" type="button">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+        <slot></slot>
+    </div>
     <div style="margin-top: 20px;">
         <h3>{{ titleTable }}</h3>
         <div id="table"></div>

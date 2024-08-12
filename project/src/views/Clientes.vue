@@ -128,29 +128,19 @@ export default {
   <main>
     <div id="containerBody">
       <TitlePage title="Lista de Clientes" />
-
-      <div class="input-group">
-        <input type="text" class="form-control" 
-          placeholder="Digite o nome ou CNPJ do cliente que deseja pesquisar..." 
-          aria-describedby="basic-addon2"
-        >
-        <div class="input-group-append">
-          <button class="btn btn-outline-secondary" id="buttonDefault" type="button">
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
-        </div>
-        <button type="button" class="btn btn-primary" id="buttonDefault" @click="setVisibleModal('Create')">
-          <i class="fa-solid fa-plus"></i> Cadastrar Cliente
-        </button>
-      </div>
       
       <Table 
         titleTable="Clientes Cadastrados"
         urlGet="http://localhost:8081/clientes" 
         :columns="['Nome', 'CNPJ', 'Email', 'telefone']"
         :keysDatas="['nome', 'cnpj', 'email', 'telefone', 'idCliente']"
+        filterPlaceholder="Digite o nome ou CNPJ do cliente que deseja pesquisar..."
         @actionSelected="setVisibleModal" @dadosTable="(a) => {dadosTable = a}"
-      />
+      >
+        <button class="btn btn-primary" id="buttonDefault" @click="setVisibleModal('Create')">
+          <i class="fa-solid fa-plus"></i> Cadastrar Cliente
+        </button>
+      </Table>
 
       <Modal :title="actionTitle" v-if="modalVisible">
         <template #content>
