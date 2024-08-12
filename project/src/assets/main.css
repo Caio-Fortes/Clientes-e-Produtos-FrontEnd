@@ -141,4 +141,8 @@ h1, h3 {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+#headerTable {
+  display: flex;
 }/*# sourceMappingURL=main.css.map */
