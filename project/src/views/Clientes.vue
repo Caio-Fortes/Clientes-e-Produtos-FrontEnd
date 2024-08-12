@@ -135,6 +135,7 @@ export default {
         :columns="['Nome', 'CNPJ', 'Email', 'telefone']"
         :keysDatas="['nome', 'cnpj', 'email', 'telefone', 'idCliente']"
         filterPlaceholder="Digite o nome ou CNPJ do cliente que deseja pesquisar..."
+        :filterKeys="['cnpj', 'nome']"
         @actionSelected="setVisibleModal" @dadosTable="(a) => {dadosTable = a}"
       >
         <button class="btn btn-primary" id="buttonDefault" @click="setVisibleModal('Create')">

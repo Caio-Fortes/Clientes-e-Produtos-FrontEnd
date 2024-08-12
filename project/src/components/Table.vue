@@ -22,11 +22,18 @@
                 type: String,
                 required: true,
                 default: 'exaple...'
+            },
+            filterKeys:{
+                type: Array,
+                required: true,
             }
         },
         data(){
             return{
-                dadosGrid: []
+                dados: [],
+                dadosGrid: [],
+                filter: '',
+                gridInstance: null
             }
         },
         mounted(){
@@ -35,15 +42,18 @@
         },
         methods:{
             async getDatas(){
-                const datas = await PostService.getPosts(this.urlGet);
-                this.dadosGrid = datas.map((a) => {
-                    return this.keysDatas.map((key) => a[key]);
-                });
-                this.$emit("dadosTable", datas);
+                this.dados = await PostService.getPosts(this.urlGet);
+                this.$emit("dadosTable", this.dados);
+                this.mapperDataGrid(this.dados);
                 this.montarTabela();
             },
+            mapperDataGrid(dados){
+                return this.dadosGrid = dados.map((a) => {
+                    return this.keysDatas.map((key) => a[key]);
+                });
+            },
             montarTabela(){
-                const grid = new Grid({
+                this.gridInstance = new Grid({
                     columns: this.columns,
                     pagination: true,
                     sort: true,
@@ -127,8 +137,15 @@
                 };
             },
             filtrar(){
-
-            }
+                const resultado = this.dados.filter(item => 
+                    this.filterKeys.some(key => 
+                    item[key].toString().toLowerCase().includes(this.filter.toLowerCase())
+                ));
+                const dadosFiltrados = this.mapperDataGrid(resultado);
+                this.gridInstance.updateConfig({
+                    data: dadosFiltrados
+                }).forceRender();
+            }   
         }
     }
 </script>
@@ -138,9 +155,10 @@
         <input type="text" class="form-control" 
           :placeholder="filterPlaceholder"
           aria-describedby="basic-addon2"
+          v-model="filter"
         >
         <div class="input-group-append">
-          <button class="btn btn-outline-secondary" id="buttonDefault" type="button">
+          <button class="btn btn-outline-secondary" @click="filtrar" id="buttonDefault" type="button">
             <i class="fa-solid fa-magnifying-glass"></i>
           </button>
         </div>
