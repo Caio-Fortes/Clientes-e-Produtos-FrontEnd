@@ -42,11 +42,16 @@ export default {
           this.actionTitle = "Excluir Cliente";
           break;
         default: 
-          break;
       }
-
       if(rowSelected){
-        const id = rowSelected[4].data;
+        this.setDatasSelected(rowSelected);
+      }
+      this.modalVisible = !this.modalVisible;
+      this.initMap();
+      this.setPointMarkerMap(this.cliente.UI);
+    },
+    setDatasSelected(rowSelected){
+      const id = rowSelected[4].data;
         const dataSelected = this.dadosTable.filter(a => a.idCliente == id);
         this.cliente.nome = dataSelected[0].nome;
         this.cliente.CNPJ = dataSelected[0].cnpj;
@@ -54,10 +59,6 @@ export default {
         this.cliente.email = dataSelected[0].email;
         this.cliente.UI = dataSelected[0].ui;
         this.idClienteSelected = id;
-      }
-      this.modalVisible = !this.modalVisible;
-      this.initMap();
-      this.setPointMarkerMap(this.cliente.UI);
     },
     initMap(){
       setTimeout(() => {
@@ -171,13 +172,13 @@ export default {
               <div>
                 CNPJ *
                 <div class="input-group mb-3">
-                  <input type="text" class="form-control" v-model="cliente.CNPJ">
+                  <input type="text" class="form-control" v-mask="'##.###.###/####-##'" v-model="cliente.CNPJ">
                 </div>
               </div>
               <div>
                 Telefone *
                 <div class="input-group mb-3">
-                  <input type="text" class="form-control" v-model="cliente.telefone">
+                  <input type="text" class="form-control" v-mask="'(##) #####-####'" v-model="cliente.telefone">
                 </div>
               </div>
             </div>

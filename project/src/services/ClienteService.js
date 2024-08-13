@@ -7,7 +7,7 @@ export default {
         try{
             return await axios.get(`${baseUrl}/${url}/${idCliente}`);
         } catch (error) {
-            alert('Não foi possivel busca o cliente: '+ error.message);
+            alert('Não foi possivel buscar o cliente: '+ error.message);
         }
     },
 

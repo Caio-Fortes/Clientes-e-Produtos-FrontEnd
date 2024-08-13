@@ -6,29 +6,38 @@ export default {
       actionTitle: '',
       dadosTable: [],
       flexConfig: "display: flex; justify-content: space-between;",
-      UIs: [],
-      map: null,
-      currentMarker: null,
-      cliente:{
-        nome: '',
-        CNPJ: '',
-        telefone: '',
-        email: '',
-        UI: '',
+      venda:{
+        clienteId: '',
+        data: '',
+        status: '',
+        valor: 0
       },
-      idClienteSelected: '',
-      gridInstance: ''
+      idVendaSelected: '',
+      gridInstance: '',
+      statusVenda: [
+        "Aguardando pagamento", "Pagamento aprovado", 
+        "Aguardando envio", "À caminho", "Finalizado"
+      ],
+      formattedValue: ''
     }
   },
-  watch:{
-    'cliente.UI': function (sigla) {
-      this.setPointMarkerMap(sigla)
-    },
+  watch: {
+    venda: {
+      deep: true,
+      handler(newValue) {
+        // Atualiza o campo formatado quando o valor é alterado programaticamente
+        this.formattedValue = this.formatToCurrency(newValue.valor);
+      }
+    }
   },
   mounted(){
-    this.getUI();
+    this.getAllClientes();
   },
   methods: {
+    async getAllClientes(){
+      const result = await ClienteService.getClientes();
+      return this.allClientes = result.data;
+    },
     setVisibleModal(action, rowSelected = null) {  
       switch (action) {
         case 'Create':
@@ -45,40 +54,49 @@ export default {
           break;
       }
       if(rowSelected){
-        const id = rowSelected[4].data;
-        const dataSelected = this.dadosTable.filter(a => a.idCliente == id);
-        this.cliente.nome = dataSelected[0].nome;
-        this.cliente.CNPJ = dataSelected[0].cnpj;
-        this.cliente.telefone = dataSelected[0].telefone;
-        this.cliente.email = dataSelected[0].email;
-        this.cliente.UI = dataSelected[0].ui;
-        this.idClienteSelected = id;
+        this.setDatasSelected(rowSelected);
       }
       this.modalVisible = !this.modalVisible;
     },
-    async getUI(){
-      this.UIs = await PostService.getPosts("https://servicodados.ibge.gov.br/api/v1/localidades/estados");
+    setDatasSelected(rowSelected){
+        const id = rowSelected[4].data;
+        const dataSelected = this.dadosTable.filter(a => a.idVenda == id);
+        this.venda.clienteId = dataSelected[0].cliente.idCliente;
+        this.venda.data = dataSelected[0].data;
+        this.venda.status = dataSelected[0].status;
+        this.venda.valor = dataSelected[0].valor;
+        this.idVendaSelected = id;
     },
     limparForms(){
-      this.idClienteSelected = null;
-      this.cliente = {
-        nome: '',
-        CNPJ: '',
-        telefone: '',
-        email: '',
-        UI: '',
-      };
+      this.idVendaSelected = null;
+      this.venda = {
+        clienteId: '',
+        data: '',
+        status: '',
+        valor: 0
+      }
     },
     async salvar(){
-      if (this.actionTitle === 'Cadastrar Cliente'){
-        await ClienteService.createCliente(this.cliente);
+      if (this.actionTitle === 'Cadastrar Venda'){
+        await VendaService.createVendas(this.venda);
       }
       else{
-        await ClienteService.updateCliente(this.cliente, this.idClienteSelected);
+        await VendaService.updateVenda(this.venda, this.idVendaSelected);
       }
     },
     async excluir(){
-      await ClienteService.deleteCliente(this.idClienteSelected);
+      await ClienteService.deleteCliente(this.idVendaSelected);
+    },
+    formatToCurrency(value) {
+      return value.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    },
+    parseFromCurrency(value) {
+      return parseFloat(value.replace(/\D/g, '')) / 100;
+    },
+    updateValue(event) {
+      const numericValue = this.parseFromCurrency(event.target.value);
+      this.venda.valor = numericValue;
+      this.formattedValue = this.formatToCurrency(numericValue);
     }
   }
 }
@@ -93,7 +111,7 @@ export default {
         titleTable="Vendas Cadastradas"
         urlGet="http://localhost:8081/vendas" 
         :columns="['Cliente', 'Data', 'Status', 'Valor']"
-        :keysDatas="['cliente.nome', 'data', 'status', 'valor-money', 'idCliente']"
+        :keysDatas="['cliente.nome', 'data', 'status', 'valor-money', 'idVenda']"
         filterPlaceholder="Digite o nome do cliente que deseja pesquisar..."
         :filterKeys="['cliente.nome']"
         @actionSelected="setVisibleModal" @dadosTable="(a) => {dadosTable = a}"
@@ -106,42 +124,35 @@ export default {
 
       <Modal :title="actionTitle" v-if="modalVisible">
         <template #content>
-          <div v-show="actionTitle === 'Cadastrar Cliente' || actionTitle === 'Editar Cliente'">
+          <div v-show="actionTitle === 'Cadastrar Venda' || actionTitle === 'Editar Venda'">
             <div>
-              Nome *
+              Cliente *
               <div class="input-group mb-3">
-                <input type="text" class="form-control" v-model="cliente.nome">
-              </div>
-            </div>
-            <div :style="flexConfig">
-              <div>
-                CNPJ *
-                <div class="input-group mb-3">
-                  <input type="text" class="form-control" v-model="cliente.CNPJ">
-                </div>
-              </div>
-              <div>
-                Telefone *
-                <div class="input-group mb-3">
-                  <input type="text" class="form-control" v-model="cliente.telefone">
-                </div>
-              </div>
-            </div>
-            <div>
-              Email *
-              <div class="input-group mb-3">
-                <input type="text" class="form-control" v-model="cliente.email">
-              </div>
-            </div>
-            <div>
-              UF *
-              <div class="input-group mb-3">
-                <select class="form-control" v-model="cliente.UI">
-                  <option v-for="ui in UIs" :value="ui.sigla">{{ ui.sigla }}</option>
+                <select class="form-control" v-model="venda.clienteId">
+                  <option v-for="cliente in allClientes" :value="cliente.idCliente">{{ cliente.nome }}</option>
                 </select>
               </div>
             </div>
-            <div id="map" style="height: 150px; width: 450px;"></div>
+            <div>
+              Data da venda*
+              <div class="input-group mb-3">
+                <input type="text" v-mask="'##/##/#####'" class="form-control" v-model="venda.data">
+              </div>
+            </div>
+            <div>
+              Situação *
+              <div class="input-group mb-3">
+                <select class="form-control" v-model="venda.status">
+                  <option v-for="status in statusVenda" :value="status">{{ status }}</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              Valor da venda *
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" v-model="formattedValue" @input="updateValue">
+              </div>
+            </div>
           </div>
           <div v-show="actionTitle === 'Excluir Cliente'">
             Deseja excluir este cliente ? Esta ação é irreversível e todas as vendas vinculadas
@@ -156,12 +167,12 @@ export default {
           Cancelar
         </button>
 
-        <button v-show="actionTitle == 'Cadastrar Cliente' || actionTitle == 'Editar Cliente'" 
+        <button v-show="actionTitle == 'Cadastrar Venda' || actionTitle == 'Editar Venda'" 
           type="button" class="btn btn-primary" @click="salvar"
         >  Salvar
         </button>
 
-        <button v-show="actionTitle == 'Excluir Cliente'" 
+        <button v-show="actionTitle == 'Excluir Venda'" 
           type="button" class="btn btn-primary" @click="excluir" 
         > Excluir
         </button>
@@ -174,7 +185,7 @@ export default {
 <script setup>
 import TitlePage from "../components/TitlePage.vue";
 import Modal from "../components/Modal.vue";
-import PostService from "@/services/PostService";
 import ClienteService from "@/services/ClienteService";
+import VendaService from "@/services/VendaService";
 import Table from '../components/Table.vue';
 </script>
