@@ -44,5 +44,13 @@ export default {
         } catch (error) {
             alert('Não foi possivel deletar a venda: '+ error.message);
         }
+    },
+
+    async buscarRelatorioVendas (ano) {
+        try{
+            return await axios.get(`${baseUrl}/${url}/resumo-vendas`, ano);
+        } catch (error) {
+            alert('Não foi possível buscar o relatório das vendas: '+ error.message);
+        }
     }
 }
