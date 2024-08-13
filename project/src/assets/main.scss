@@ -98,8 +98,35 @@ h1, h3{
     color: white;
     margin-top: 15px;
 }
+
 .link-painel{
     margin: 10px 0px 10px 0px;
+}
+
+.cards-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 50px 30px;
+}
+  
+.card {
+    flex: 1;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    text-align: center;
+}
+  
+.card h3 {
+    margin: 16px 0 8px;
+    font-size: 1.25rem;
+}
+  
+.card p {
+    font-size: 1rem;
+    color: #666;
 }
 
 @include setConfigHeader();
