@@ -165,3 +165,8 @@ h1, h3{
 .titles{
     color: $StrongGray;
 }
+
+#contentCards{
+    display: flex;
+    justify-content: center;
+}
