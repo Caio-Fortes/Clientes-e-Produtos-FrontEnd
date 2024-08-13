@@ -25,7 +25,6 @@ export default {
     venda: {
       deep: true,
       handler(newValue) {
-        // Atualiza o campo formatado quando o valor é alterado programaticamente
         this.formattedValue = this.formatToCurrency(newValue.valor);
       }
     }

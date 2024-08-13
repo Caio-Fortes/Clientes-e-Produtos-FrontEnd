@@ -4,7 +4,8 @@ export default {
         return {
             leftPainelVisible: false,
             cssLinks: 'text-decoration: none; color: #b9b9b9c4;',
-            modalCadastrarCliente: false
+            modalCadastrarCliente: false,
+            modalCadastrarVenda: false
         }
     },
     methods:{
@@ -57,7 +58,7 @@ export default {
                     </RouterLink>
                 </div>
                 <div class="link-painel">
-                    <a href="#" class="links">Cadastrar venda</a>
+                    <a href="#" class="links" @click="modalCadastrarVenda = true">Cadastrar venda</a>
                 </div>
             </div>
             <div>
@@ -74,9 +75,13 @@ export default {
     <div v-if="modalCadastrarCliente">
         <ModalCadastrarCliente @fecharModal="modalCadastrarCliente = false" />
     </div>
+    <div v-if="modalCadastrarVenda">
+        <ModalCadastrarVenda @fecharModal="modalCadastrarVenda = false" />
+    </div>
 </template>
 
 <script setup>
     import { RouterLink, RouterView } from 'vue-router'
     import ModalCadastrarCliente from './ModalCadastrarCliente.vue';
+    import ModalCadastrarVenda from '@/components/ModalCadastrarVenda.vue';
 </script>

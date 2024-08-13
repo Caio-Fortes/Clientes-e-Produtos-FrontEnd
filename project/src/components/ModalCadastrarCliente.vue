@@ -84,7 +84,6 @@ export default {
         fecharModal(){
             this.$emit('fecharModal');
         },
-
     }
 }
 </script>
