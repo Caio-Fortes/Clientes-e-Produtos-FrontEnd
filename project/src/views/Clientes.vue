@@ -122,11 +122,12 @@ export default {
     async salvar(){
       try {
         await ClienteService.createCliente(this.cliente);
+        alert('Cliente criado com sucesso!')
         setTimeout(() => {
           window.location.reload()
         }, 100)
       } catch (error) {
-        alert('Não foi possivel salvar as alterações!')
+        alert('Não foi possivel salvar as alterações: '+ error.message)
       }
     },
     excluir(){
