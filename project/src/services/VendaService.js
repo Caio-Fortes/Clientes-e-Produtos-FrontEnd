@@ -37,12 +37,12 @@ export default {
         }
     },
 
-    async deleteCliente (idVenda) {
+    async deleteVenda (idVenda) {
         try{
             await axios.delete(`${baseUrl}/${url}/${idVenda}`);
             window.location.reload();
         } catch (error) {
-            alert('Não foi possivel deletar o cliente: '+ error.message);
+            alert('Não foi possivel deletar a venda: '+ error.message);
         }
     }
 }

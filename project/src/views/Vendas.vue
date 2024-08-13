@@ -85,7 +85,7 @@ export default {
       }
     },
     async excluir(){
-      await ClienteService.deleteCliente(this.idVendaSelected);
+      await VendaService.deleteVenda(this.idVendaSelected);
     },
     formatToCurrency(value) {
       return value.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -154,9 +154,8 @@ export default {
               </div>
             </div>
           </div>
-          <div v-show="actionTitle === 'Excluir Cliente'">
-            Deseja excluir este cliente ? Esta ação é irreversível e todas as vendas vinculadas
-            ao cliente serão excluidas.
+          <div v-show="actionTitle === 'Excluir Venda'">
+            Deseja excluir esta venda ? Esta ação é irreversível e não poderá ser desfeita.
           </div>
       </template>
       <template #buttons>
