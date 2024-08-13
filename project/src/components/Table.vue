@@ -165,7 +165,7 @@
         <slot></slot>
     </div>
     <div style="margin-top: 20px;">
-        <h3>{{ titleTable }}</h3>
+        <h3 class="titles">{{ titleTable }}</h3>
         <div id="table"></div>
     </div>
 </template>

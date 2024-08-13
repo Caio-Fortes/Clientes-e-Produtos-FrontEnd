@@ -3,7 +3,7 @@ export default {
     data(){
         return {
             leftPainelVisible: false,
-            
+            cssLinks: 'text-decoration: none; color: #b9b9b9c4;'
         }
     },
     methods:{
@@ -40,29 +40,29 @@ export default {
             <div>
                 <div class="title-painel">GESTÃO DE CLIENTES</div>
                 <div class="link-painel">
-                    <RouterLink to="/" @click="setVisibleleftPainel">
+                    <RouterLink to="/" @click="setVisibleleftPainel" class="links">
                         Lista de clientes
                     </RouterLink>
                 </div>
                 <div class="link-painel">
-                    <a href="#">Cadastrar cliente </a>
+                    <a href="#" class="links">Cadastrar cliente </a>
                 </div>
             </div>
             <div>
                 <div class="title-painel">GESTÃO DE VENDAS</div>
                 <div class="link-painel">
-                    <RouterLink to="/vendas" @click="setVisibleleftPainel">
+                    <RouterLink to="/vendas" @click="setVisibleleftPainel" class="links">
                         Lista de vendas
                     </RouterLink>
                 </div>
                 <div class="link-painel">
-                    <a href="#">Cadastrar venda</a>
+                    <a href="#" class="links">Cadastrar venda</a>
                 </div>
             </div>
             <div>
                 <div class="title-painel">Relatórios</div>
                 <div class="link-painel">
-                    <RouterLink to="/relatorios" @click="setVisibleleftPainel">
+                    <RouterLink to="/relatorios" @click="setVisibleleftPainel" class="links">
                         Relatórios
                     </RouterLink>
                 </div>
