@@ -51,9 +51,6 @@
                     return this.keysDatas.map((key) => a[key]);
                 });
             },
-            atualizaTabela(){
-                alert('teste')
-            },
             montarTabela(){
                 this.gridInstance = new Grid({
                     columns: this.columns,

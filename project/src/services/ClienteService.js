@@ -1,25 +1,48 @@
-import httpService from '@/services/HttpService';
-
-const url = "/clientes"
+import axios from 'axios';
+const url = "clientes";
+const baseUrl = "http://localhost:8081"
 
 export default {
-    getClienteById (idCliente) {
-        return httpService.get(`${url}/${idCliente}`)
+    async getClienteById (idCliente) {
+        try{
+            return await axios.get(`${baseUrl}/${url}/${idCliente}`);
+        } catch (error) {
+            alert('Não foi possivel busca o cliente: '+ error.message);
+        }
     },
 
-    getClientes() {
-        return httpService.get(url)
+    async getClientes() {
+        try{
+            return await axios.get(`${baseUrl}/${url}`);
+        } catch (error) {
+            alert('Não foi possivel buscar os clientes: '+ error.message);
+        }
     },
 
-    createCliente (cliente) {
-        return httpService.post(url, cliente)
+    async createCliente (cliente) {
+        try{
+            await axios.post(`${baseUrl}/${url}`, cliente);
+            window.location.reload();
+        } catch (error) {
+            alert('Não foi possivel criar um novo cliente: '+ error.message);
+        }
     },
 
-    updateCliente (cliente, idCliente) {
-        return httpService.update(url, { id: idCliente, clienteRecordDto: cliente })
+    async updateCliente (cliente, idCliente) {
+        try{
+            await axios.put(`${baseUrl}/${url}/${idCliente}`, cliente);
+            window.location.reload();
+        } catch (error) {
+            alert('Não foi possivel editar o cliente: '+ error.message);
+        }
     },
 
-    deleteCliente (idCliente) {
-        return httpService.delete(url, idCliente)
+    async deleteCliente (idCliente) {
+        try{
+            await axios.delete(`${baseUrl}/${url}/${idCliente}`);
+            window.location.reload();
+        } catch (error) {
+            alert('Não foi possivel deletar o cliente: '+ error.message);
+        }
     }
 }

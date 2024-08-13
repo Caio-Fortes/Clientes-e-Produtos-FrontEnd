@@ -22,6 +22,51 @@ export default {
   },
   watch:{
     'cliente.UI': function (sigla) {
+      this.setPointMarkerMap(sigla)
+    },
+  },
+  mounted(){
+    this.getUI();
+  },
+  methods: {
+    setVisibleModal(action, rowSelected = null) {  
+      switch (action) {
+        case 'Create':
+          this.actionTitle = "Cadastrar Cliente";
+          this.limparForms();
+          break;
+        case 'Edit':
+          this.actionTitle = "Editar Cliente";
+          break;
+        case 'Delete':
+          this.actionTitle = "Excluir Cliente";
+          break;
+        default: 
+          break;
+      }
+
+      if(rowSelected){
+        const id = rowSelected[4].data;
+        const dataSelected = this.dadosTable.filter(a => a.idCliente == id);
+        this.cliente.nome = dataSelected[0].nome;
+        this.cliente.CNPJ = dataSelected[0].cnpj;
+        this.cliente.telefone = dataSelected[0].telefone;
+        this.cliente.email = dataSelected[0].email;
+        this.cliente.UI = dataSelected[0].ui;
+        this.idClienteSelected = id;
+      }
+      this.modalVisible = !this.modalVisible;
+      this.initMap();
+      this.setPointMarkerMap(this.cliente.UI);
+    },
+    initMap(){
+      setTimeout(() => {
+        this.map = L.map('map').setView([-19.9167, -43.9345], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        }).addTo(this.map);
+      }, 300);
+    },
+    setPointMarkerMap(sigla){
       if(sigla != ''){
         const map = this.map;
       let currentMarker = this.currentMarker;
@@ -65,47 +110,6 @@ export default {
       this.currentMarker = currentMarker;
       }
     },
-  },
-  mounted(){
-    this.getUI();
-  },
-  methods: {
-    setVisibleModal(action, rowSelected = null) {  
-      switch (action) {
-        case 'Create':
-          this.actionTitle = "Cadastrar Cliente";
-          this.limparForms();
-          break;
-        case 'Edit':
-          this.actionTitle = "Editar Cliente";
-          break;
-        case 'Delete':
-          this.actionTitle = "Excluir Cliente";
-          break;
-        default: 
-          break;
-      }
-
-      if(rowSelected){
-        const id = rowSelected[4].data;
-        const dataSelected = this.dadosTable.filter(a => a.idCliente == id);
-        this.cliente.nome = dataSelected[0].nome;
-        this.cliente.CNPJ = dataSelected[0].cnpj;
-        this.cliente.telefone = dataSelected[0].telefone;
-        this.cliente.email = dataSelected[0].email;
-        this.cliente.ui = dataSelected[0].ui;
-        this.idClienteSelected = id;
-      }
-      this.modalVisible = !this.modalVisible;
-      this.initMap();
-    },
-    initMap(){
-      setTimeout(() => {
-        this.map = L.map('map').setView([-19.9167, -43.9345], 5);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        }).addTo(this.map);
-      }, 300);
-    },
     async getUI(){
       this.UIs = await PostService.getPosts("https://servicodados.ibge.gov.br/api/v1/localidades/estados");
     },
@@ -120,18 +124,15 @@ export default {
       };
     },
     async salvar(){
-      try {
+      if (this.actionTitle === 'Cadastrar Cliente'){
         await ClienteService.createCliente(this.cliente);
-        alert('Cliente criado com sucesso!')
-        setTimeout(() => {
-          window.location.reload()
-        }, 100)
-      } catch (error) {
-        alert('Não foi possivel salvar as alterações: '+ error.message)
+      }
+      else{
+        await ClienteService.updateCliente(this.cliente, this.idClienteSelected);
       }
     },
-    excluir(){
-      console.log(this.idClienteSelected)
+    async excluir(){
+      await ClienteService.deleteCliente(this.idClienteSelected);
     }
   }
 }

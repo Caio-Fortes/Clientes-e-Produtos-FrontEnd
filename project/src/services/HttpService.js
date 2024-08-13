@@ -21,6 +21,7 @@ export default {
   },
 
   delete(resource) {
+    console.log(httpClient)
     return httpClient.delete(resource);
   }
 };

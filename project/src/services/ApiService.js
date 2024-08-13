@@ -10,5 +10,8 @@ const apiClient = axios.create({
 export default {
   get(resource, params = {}) {
     return apiClient.get(resource, { params });
-  }
+  },
+
+  
+
 };
