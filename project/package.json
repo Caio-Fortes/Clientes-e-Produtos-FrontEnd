@@ -17,7 +17,6 @@
     "leaflet": "^1.9.4",
     "pinia": "^2.1.7",
     "vue": "^3.4.29",
-    "vue-notification": "^1.3.20",
     "vue-router": "^4.3.3"
   },
   "devDependencies": {
