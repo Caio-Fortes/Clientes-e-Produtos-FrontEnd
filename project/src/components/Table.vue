@@ -44,7 +44,6 @@
             async getDatas(){
                 this.dados = await PostService.getPosts(this.urlGet);
                 this.$emit("dadosTable", this.dados);
-                this.mapperDataGrid(this.dados);
                 this.montarTabela();
             },
             mapperDataGrid(dados){
@@ -52,13 +51,17 @@
                     return this.keysDatas.map((key) => a[key]);
                 });
             },
+            atualizaTabela(){
+                alert('teste')
+            },
             montarTabela(){
                 this.gridInstance = new Grid({
                     columns: this.columns,
                     pagination: true,
                     sort: true,
-                    data: this.dadosGrid
+                    data: this.mapperDataGrid(this.dados),
                 }).render(document.getElementById("table"));
+                this.$emit("instanceTable", this.gridInstance);
             },
             setConfigColumns(){
                 this.columns.push({

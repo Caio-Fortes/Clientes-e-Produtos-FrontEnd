@@ -14,14 +14,16 @@ export default {
         CNPJ: '',
         telefone: '',
         email: '',
-        ui: '',
+        UI: '',
       },
-      idClienteSelected: ''
+      idClienteSelected: '',
+      gridInstance: ''
     }
   },
   watch:{
-    'cliente.ui': function (sigla) {
-      const map = this.map;
+    'cliente.UI': function (sigla) {
+      if(sigla != ''){
+        const map = this.map;
       let currentMarker = this.currentMarker;
       if (currentMarker) { map.removeLayer(currentMarker)}
 
@@ -61,19 +63,14 @@ export default {
       }
       updateMapView(stateCoordinates[sigla]);
       this.currentMarker = currentMarker;
+      }
     },
   },
   mounted(){
     this.getUI();
   },
   methods: {
-    setVisibleModal(action, rowSelected = null) {
-      setTimeout(() => {
-        this.map = L.map('map').setView([-19.9167, -43.9345], 5);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        }).addTo(this.map);
-      }, 300);
-      
+    setVisibleModal(action, rowSelected = null) {  
       switch (action) {
         case 'Create':
           this.actionTitle = "Cadastrar Cliente";
@@ -100,6 +97,14 @@ export default {
         this.idClienteSelected = id;
       }
       this.modalVisible = !this.modalVisible;
+      this.initMap();
+    },
+    initMap(){
+      setTimeout(() => {
+        this.map = L.map('map').setView([-19.9167, -43.9345], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        }).addTo(this.map);
+      }, 300);
     },
     async getUI(){
       this.UIs = await PostService.getPosts("https://servicodados.ibge.gov.br/api/v1/localidades/estados");
@@ -111,11 +116,18 @@ export default {
         CNPJ: '',
         telefone: '',
         email: '',
-        ui: '',
+        UI: '',
       };
     },
-    salvar(){
-      
+    async salvar(){
+      try {
+        await ClienteService.createCliente(this.cliente);
+        setTimeout(() => {
+          window.location.reload()
+        }, 100)
+      } catch (error) {
+        alert('Não foi possivel salvar as alterações!')
+      }
     },
     excluir(){
       console.log(this.idClienteSelected)
@@ -129,7 +141,7 @@ export default {
     <div id="containerBody">
       <TitlePage title="Lista de Clientes" />
       
-      <Table 
+      <Table ref="tableComponent"
         titleTable="Clientes Cadastrados"
         urlGet="http://localhost:8081/clientes" 
         :columns="['Nome', 'CNPJ', 'Email', 'telefone']"
@@ -137,6 +149,7 @@ export default {
         filterPlaceholder="Digite o nome ou CNPJ do cliente que deseja pesquisar..."
         :filterKeys="['cnpj', 'nome']"
         @actionSelected="setVisibleModal" @dadosTable="(a) => {dadosTable = a}"
+        @instanceTable="(instance) => {gridInstance = instance}"
       >
         <button class="btn btn-primary" id="buttonDefault" @click="setVisibleModal('Create')">
           <i class="fa-solid fa-plus"></i> Cadastrar Cliente
@@ -175,7 +188,7 @@ export default {
             <div>
               UF *
               <div class="input-group mb-3">
-                <select class="form-control" v-model="cliente.ui">
+                <select class="form-control" v-model="cliente.UI">
                   <option v-for="ui in UIs" :value="ui.sigla">{{ ui.sigla }}</option>
                 </select>
               </div>
@@ -214,5 +227,6 @@ export default {
 import TitlePage from "../components/TitlePage.vue";
 import Modal from "../components/Modal.vue";
 import PostService from "@/services/PostService";
+import ClienteService from "@/services/ClienteService";
 import Table from '../components/Table.vue';
 </script>
