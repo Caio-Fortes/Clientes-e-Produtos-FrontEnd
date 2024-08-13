@@ -46,9 +46,22 @@
                 this.$emit("dadosTable", this.dados);
                 this.montarTabela();
             },
-            mapperDataGrid(dados){
+            mapperDataGrid(dados) {
                 return this.dadosGrid = dados.map((a) => {
-                    return this.keysDatas.map((key) => a[key]);
+                    return this.keysDatas.map((key) => {
+                        let value;
+                        if (key.includes('-money')) {
+                            const keysArray = key.split('-');
+                            value = a[keysArray[0]].toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                        }
+                        else{
+                            const keysArray = key.split('.');
+                            value = keysArray.reduce((acc, curr) => {
+                                return acc ? acc[curr] : undefined;
+                            }, a);
+                        }
+                        return value;
+                    });
                 });
             },
             montarTabela(){
@@ -124,28 +137,22 @@
                     },
                     width: "120px"
                 })
-                const style = document.createElement('style');
-                style.innerHTML = `
-                    .gridjs-th:nth-child(4),
-                    .gridjs-td:nth-child(4) {
-                    display: none;
-                    }
-                `;
-                document.head.appendChild(style);
                 const handleDropdownClick = (action, rowSelected) => {
                     this.$emit('actionSelected', action, rowSelected)
                 };
             },
-            filtrar(){
+            filtrar() {
                 const resultado = this.dados.filter(item => 
-                    this.filterKeys.some(key => 
-                    item[key].toString().toLowerCase().includes(this.filter.toLowerCase())
-                ));
+                    this.filterKeys.some(key => {
+                        const value = key.split('.').reduce((acc, curr) => acc ? acc[curr] : undefined, item);
+                        return value && value.toString().toLowerCase().includes(this.filter.toLowerCase());
+                    })
+                );
                 const dadosFiltrados = this.mapperDataGrid(resultado);
                 this.gridInstance.updateConfig({
                     data: dadosFiltrados
                 }).forceRender();
-            }   
+            }
         }
     }
 </script>
