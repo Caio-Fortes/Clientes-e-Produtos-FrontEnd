@@ -15,7 +15,9 @@ export default {
             const result = await VendaService.buscarRelatorioVendas("2024");
             this.relatorioAnual = result.data.vendasAnuais;
             this.relatorioMensal = result.data.vendasMensais[0];
-            this.setCards();
+            if(result.data.vendasAnuais != null){
+                this.setCards();
+            }
         },
         setCards(){
             this.cards = [
@@ -52,13 +54,16 @@ export default {
 
 <template>
     <div class="cards-container">
-      <div class="card" v-for="card in cards">
-        <h3 class="titles">{{ card.title }}</h3>
-        <div id="contentCards">
-            <span class="material-symbols-outlined">{{ card.icon }}</span>
-            <p>{{ card.description }}</p>
+        <div class="card" v-for="card in cards">
+            <h3 class="titles">{{ card.title }}</h3>
+            <div id="contentCards">
+                <span class="material-symbols-outlined">{{ card.icon }}</span>
+                <p>{{ card.description }}</p>
+            </div>
         </div>
-      </div>
+        <div class="card" v-show="relatorioAnual === null">
+            Não há relatório disponivel, crie mais vendas ser gerado o relatório.
+        </div>
     </div>
 </template>
 

@@ -190,7 +190,7 @@ h1, h3 {
   height: 120vh;
   background-color: #023E8A;
   position: absolute;
-  z-index: 1000;
+  z-index: 10000;
   border-radius: 0px 5px 5px 0px;
 }
 
