@@ -7,7 +7,7 @@ export default {
         try{
             return await axios.get(`${baseUrl}/${url}/${idVenda}`);
         } catch (error) {
-            alert('Não foi possivel buscar a venda: '+ error.message);
+            console.log('Não foi possivel buscar a venda: '+ error.message);
         }
     },
 
@@ -15,25 +15,41 @@ export default {
         try{
             return await axios.get(`${baseUrl}/${url}`);
         } catch (error) {
-            alert('Não foi possivel buscar as vendas: '+ error.message);
+            console.log('Não foi possivel buscar as vendas: '+ error.message);
         }
     },
 
-    async createVendas (cliente) {
+    async createVendas (venda) {
+        if (
+            !venda.data ||
+            !venda.status ||
+            !venda.valor
+        ) {
+            alert("Por favor, preencha todos os campos antes de salvar.");
+            return;
+        }
         try{
-            await axios.post(`${baseUrl}/${url}`, cliente);
+            await axios.post(`${baseUrl}/${url}`, venda);
             window.location.reload();
         } catch (error) {
-            alert('Não foi possivel criar um novo cliente: '+ error.message);
+            console.log('Não foi possivel criar uma nova venda: '+ error.message);
         }
     },
 
     async updateVenda (venda, idVenda) {
+        if (
+            !venda.data ||
+            !venda.status ||
+            !venda.valor
+        ) {
+            alert("Por favor, preencha todos os campos antes de salvar.");
+            return;
+        }
         try{
             await axios.put(`${baseUrl}/${url}/${idVenda}`, venda);
             window.location.reload();
         } catch (error) {
-            alert('Não foi possivel editar o cliente: '+ error.message);
+            console.log('Não foi possivel editar a venda: '+ error.message);
         }
     },
 
@@ -42,7 +58,7 @@ export default {
             await axios.delete(`${baseUrl}/${url}/${idVenda}`);
             window.location.reload();
         } catch (error) {
-            alert('Não foi possivel deletar a venda: '+ error.message);
+            console.log('Não foi possivel deletar a venda: '+ error.message);
         }
     },
 
@@ -50,7 +66,7 @@ export default {
         try{
             return await axios.get(`${baseUrl}/${url}/resumo-vendas`, ano);
         } catch (error) {
-            alert('Não foi possível buscar o relatório das vendas: '+ error.message);
+            console.log('Não foi possível buscar o relatório das vendas: '+ error.message);
         }
     }
 }

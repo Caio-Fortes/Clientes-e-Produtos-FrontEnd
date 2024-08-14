@@ -79,6 +79,7 @@ export default {
             this.currentMarker = currentMarker;
         },
         async salvar(){
+            
             await ClienteService.createCliente(this.cliente);
         },
         fecharModal(){
